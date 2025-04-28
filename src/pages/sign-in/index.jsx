@@ -4,25 +4,28 @@ import { useAxios } from "../../hooks/useAxios";
 import { Loader } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
   const axios = useAxios();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const login = (e) => {
     setLoading(true);
     axios({ url: "api/auth/sign-in", method: "POST", body: e })
       .then((data) => {
         toast.success("Xush kelibsiz");
-        let { token } = data;
+        let { token } = data.data;
         localStorage.setItem("token", token);
-        navigate("/")
+        navigate("/");
       })
       .catch((error) => {
         console.error("Login error:", error.response?.data || error.message);
-        toast.error(error.response?.data?.message || "Loginda xatolik yuz berdi");
+        toast.error(
+          error.response?.data?.message || "Loginda xatolik yuz berdi"
+        );
       })
-      
+
       .finally(() => setLoading(false));
   };
   return (
@@ -48,7 +51,10 @@ const SignIn = () => {
         >
           <Input.Password placeholder="**************" />
         </Form.Item>
-        <Link to={"/sign-up"} className="text-end w-full" >Siz ro'yxatdan o'tmaganmisiz ?</Link>
+        <Link to="/sign-up" className="text-end w-full">
+          Siz ro'yxatdan o'tmaganmisiz?
+        </Link>
+
         <Button className="w-full h-[45px]" htmlType="submit" type="primary">
           {loading ? <Loader className="animate-spin text-[16px]" /> : "Kirish"}
         </Button>

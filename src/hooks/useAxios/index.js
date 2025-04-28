@@ -11,7 +11,7 @@ export const useAxios = () => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       params,
-    }).then((res) => res.data.data);
+    }).then((res) => res.data);
   };
   return request;
 };
