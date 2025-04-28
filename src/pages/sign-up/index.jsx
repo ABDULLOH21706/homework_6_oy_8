@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useAxios } from "../../hooks/useAxios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "lucide-react";
 
 const SignUp = () => {
   const axios = useAxios();
@@ -15,13 +16,14 @@ const SignUp = () => {
       method: "POST",
       body: e,
     })
-      .then((res) => {
+      .then(() => {
+        localStorage.setItem("email", e.email)
         toast.success("Iltimos emailingizga borgan parollni kiriting !")
         navigate("/verify-password")
       })
       .catch((error) => {
         toast.error("Bu email oldin ro'yxatdan o'tgan !")
-        navigate("sign-in")
+        navigate("/sign-in")
       })
       .finally(() => setLoading(false));
   };
@@ -57,7 +59,7 @@ const SignUp = () => {
           <Input.Password placeholder="****************" />
         </Form.Item>
         <Button htmlType="submit" className="w-full" type="primary">
-          Ro'yxatdan o'tish
+          {loading ? <Loader className="animate-spin" /> : "Ro'yxatdan o'tish"}
         </Button>
       </Form>
     </div>
