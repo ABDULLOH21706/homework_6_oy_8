@@ -8,25 +8,49 @@ import { Loader } from "lucide-react";
 const SignUp = () => {
   const axios = useAxios();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
-  const register = (e) => {
+  const navigate = useNavigate();
+  // const register = async (values) => {
+  //   setLoading(true);
+  //   try {
+  //     const data = await axios({
+  //       url: "api/auth/sign-up",
+  //       method: "POST",
+  //       body: values,
+  //     });
+
+  //     sessionStorage.setItem("user", JSON.stringify(values));
+  //     message.success("Ro'yxatdan o'tish muvaffaqiyatli!");
+  //     navigate("/");
+  //   } catch (error) {
+  //     toast.error("Bu email oldin ro'yxatdan o'tgan !");
+  //       navigate("/sign-in");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const register = async (values) => {
     setLoading(true);
-    axios({
-      url: "api/auth/sign-up",
-      method: "POST",
-      body: e,
-    })
-      .then(() => {
-        localStorage.setItem("email", e.email)
-        toast.success("Iltimos emailingizga borgan parollni kiriting !")
-        navigate("/verify-password")
-      })
-      .catch((error) => {
-        toast.error("Bu email oldin ro'yxatdan o'tgan !")
-        navigate("/sign-in")
-      })
-      .finally(() => setLoading(false));
+    try {
+      await axios({
+        url: "api/auth/sign-up",
+        method: "POST",
+        body: values,
+      });
+
+      // Agar backenddan foydalanuvchi ma'lumotlari qaytmasa, kiritilgan qiymatlardan foydalaning:
+      sessionStorage.setItem("user", JSON.stringify(values));
+
+      message.success("Ro'yxatdan o'tish muvaffaqiyatli!");
+      navigate("/");
+    } catch (error) {
+      toast.error("Bu email oldin ro'yxatdan o'tgan !");
+      navigate("/sign-in");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <div className="flex-col w-[400px] h-screen flex items-center justify-center m-auto gap-5">
       <div className="text-center">
